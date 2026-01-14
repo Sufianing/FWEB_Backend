@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import reservation from "./routes/reservation.js";
 import user from "./routes/user.js";
-import loan from "./routes/loan.js";    
+import loan from "./routes/loan.js";
 import book from "./routes/book.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
@@ -11,7 +11,6 @@ import mongoose from "mongoose";
 
 dotenv.config();
 
-// MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
@@ -19,21 +18,15 @@ mongoose
 
 const app = express();
 
-// ✅ FIXED CORS CONFIG
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://my-repository-l6wwpb7qm-sufians-projects-62efa871.vercel.app"
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+// ✅ FINAL CORS FIX
+app.use(cors());
+app.options("*", cors());
 
 // Parse JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Swagger setup
+// Swagger
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
@@ -55,14 +48,11 @@ app.use("/user", user);
 app.use("/loan", loan);
 app.use("/book", book);
 
-// Health check
 app.get("/", (req, res) => {
   res.send("<h1>SunnyBooks API is running</h1>");
 });
 
-// Port
 const PORT = process.env.PORT || 5050;
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
