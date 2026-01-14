@@ -11,6 +11,7 @@ import mongoose from "mongoose";
 
 dotenv.config();
 
+// MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
@@ -18,15 +19,14 @@ mongoose
 
 const app = express();
 
-// ✅ FINAL CORS FIX
+// ✅ FINAL CORS FIX (DO NOT add app.options("*"))
 app.use(cors());
-app.options("*", cors());
 
 // Parse JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Swagger
+// Swagger setup
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
@@ -48,10 +48,12 @@ app.use("/user", user);
 app.use("/loan", loan);
 app.use("/book", book);
 
+// Health check
 app.get("/", (req, res) => {
   res.send("<h1>SunnyBooks API is running</h1>");
 });
 
+// Port
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
