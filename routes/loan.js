@@ -6,6 +6,22 @@ import "../models/book.js";
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /loan:
+ *   get:
+ *     summary: Retrieve loans
+ *     description: Returns loan records. Can be filtered by user ID.
+ *     parameters:
+ *       - in: query
+ *         name: user
+ *         schema:
+ *           type: string
+ *         description: User ID to filter loans
+ *     responses:
+ *       200:
+ *         description: List of loans
+ */
 router.get("/", async (req, res) => {
   try {
     const filter = {};
